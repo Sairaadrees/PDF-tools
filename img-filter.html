@@ -1,1 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Apply filters to images online for free. Easily apply grayscale, sepia, invert, and more with our responsive image filter tool. Supports JPEG, PNG, and WebP formats.">
+    <meta name="keywords" content="image filter, filter images, online image filter, grayscale, sepia, invert, JPEG, PNG, WebP">
+    <meta name="author" content="Your Name">
+    <title>Image Filter - Apply Filters Online</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
 
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Header */
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .filter-tool {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .filter-tool input[type="file"] {
+            display: none;
+        }
+
+        .filter-tool label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .filter-tool canvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .filter-tool select {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        .filter-tool button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .filter-tool button:hover {
+            background-color: #218838;
+        }
+
+        .output-section {
+            margin-top: 20px;
+        }
+
+        .output-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .output-section a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .output-section a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Ad Section */
+        .ad-section {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .filter-tool {
+                padding: 15px;
+            }
+        }
+    </style>
+    <!-- Google AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Image Filter</h1>
+        <p>Apply filters to images online for free. Easily apply grayscale, sepia, invert, and more.</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Image Filter Tool -->
+        <section class="filter-tool">
+            <input type="file" id="image-input" accept="image/*">
+            <label for="image-input">Choose an Image</label>
+            <canvas id="filter-canvas"></canvas>
+            <select id="filter-select">
+                <option value="none">No Filter</option>
+                <option value="grayscale">Grayscale</option>
+                <option value="sepia">Sepia</option>
+                <option value="invert">Invert</option>
+                <option value="blur">Blur</option>
+                <option value="brightness">Brightness</option>
+                <option value="contrast">Contrast</option>
+            </select>
+            <button id="apply-filter-button">Apply Filter</button>
+            <div class="output-section">
+                <img id="output-image" src="" alt="Filtered Image" style="display: none;">
+                <a id="download-link" download="filtered-image.jpg" style="display: none;">Download Filtered Image</a>
+            </div>
+        </section>
+
+        <!-- Ad Section -->
+        <section class="ad-section">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+                 data-ad-slot="YOUR_AD_UNIT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 Image Filter. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const imageInput = document.getElementById('image-input');
+        const filterCanvas = document.getElementById('filter-canvas');
+        const filterSelect = document.getElementById('filter-select');
+        const applyFilterButton = document.getElementById('apply-filter-button');
+        const outputImage = document.getElementById('output-image');
+        const downloadLink = document.getElementById('download-link');
+        let ctx = filterCanvas.getContext('2d');
+        let img = new Image();
+
+        // Handle image upload
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        filterCanvas.width = img.width;
+                        filterCanvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Apply filter
+        applyFilterButton.addEventListener('click', () => {
+            const filter = filterSelect.value;
+
+            switch (filter) {
+                case 'grayscale':
+                    ctx.filter = 'grayscale(100%)';
+                    break;
+                case 'sepia':
+                    ctx.filter = 'sepia(100%)';
+                    break;
+                case 'invert':
+                    ctx.filter = 'invert(100%)';
+                    break;
+                case 'blur':
+                    ctx.filter = 'blur(5px)';
+                    break;
+                case 'brightness':
+                    ctx.filter = 'brightness(150%)';
+                    break;
+                case 'contrast':
+                    ctx.filter = 'contrast(200%)';
+                    break;
+                default:
+                    ctx.filter = 'none';
+            }
+
+            ctx.clearRect(0, 0, filterCanvas.width, filterCanvas.height);
+            ctx.drawImage(img, 0, 0);
+
+            // Convert canvas to image
+            const url = filterCanvas.toDataURL('image/jpeg', 1.0);
+            outputImage.src = url;
+            downloadLink.href = url;
+            downloadLink.style.display = 'inline-block';
+            outputImage.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
