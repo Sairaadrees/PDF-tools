@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Merge two images online for free. Easily merge two images into a single image with our responsive image merge tool. Supports JPEG, PNG, and WebP formats.">
+    <meta name="keywords" content="image merge, merge two images, online image merge, combine images, JPEG, PNG, WebP">
+    <meta name="author" content="Your Name">
+    <title>Image Merger - Merge Two Images Online</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Header */
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .merger-tool {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .merger-tool input[type="file"] {
+            display: none;
+        }
+
+        .merger-tool label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .merger-tool select {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        .merger-tool button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .merger-tool button:hover {
+            background-color: #218838;
+        }
+
+        .output-section {
+            margin-top: 20px;
+        }
+
+        .output-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .output-section a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .output-section a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Ad Section */
+        .ad-section {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .merger-tool {
+                padding: 15px;
+            }
+        }
+    </style>
+    <!-- Google AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Image Merger</h1>
+        <p>Merge two images online for free. Easily merge two images into a single image.</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Image Merger Tool -->
+        <section class="merger-tool">
+            <!-- First Image Input -->
+            <div>
+                <input type="file" id="image-input-1" accept="image/*">
+                <label for="image-input-1">Choose First Image</label>
+            </div>
+
+            <!-- Second Image Input -->
+            <div>
+                <input type="file" id="image-input-2" accept="image/*">
+                <label for="image-input-2">Choose Second Image</label>
+            </div>
+
+            <!-- Merge Direction -->
+            <select id="merge-direction">
+                <option value="horizontal">Horizontal</option>
+                <option value="vertical">Vertical</option>
+            </select>
+
+            <!-- Merge Button -->
+            <button id="merge-button">Merge Images</button>
+
+            <!-- Output Section -->
+            <div class="output-section">
+                <img id="output-image" src="" alt="Merged Image" style="display: none;">
+                <a id="download-link" download="merged-image.jpg" style="display: none;">Download Merged Image</a>
+            </div>
+        </section>
+
+        <!-- Ad Section -->
+        <section class="ad-section">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+                 data-ad-slot="YOUR_AD_UNIT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 Image Merger. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const imageInput1 = document.getElementById('image-input-1');
+        const imageInput2 = document.getElementById('image-input-2');
+        const mergeDirection = document.getElementById('merge-direction');
+        const mergeButton = document.getElementById('merge-button');
+        const outputImage = document.getElementById('output-image');
+        const downloadLink = document.getElementById('download-link');
+        let image1 = null;
+        let image2 = null;
+
+        // Handle first image upload
+        imageInput1.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    image1 = new Image();
+                    image1.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle second image upload
+        imageInput2.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    image2 = new Image();
+                    image2.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Merge images
+        mergeButton.addEventListener('click', () => {
+            if (!image1 || !image2) {
+                alert('Please upload both images.');
+                return;
+            }
+
+            const direction = mergeDirection.value;
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            if (direction === 'horizontal') {
+                // Calculate total width and height for horizontal merge
+                const totalWidth = image1.width + image2.width;
+                const maxHeight = Math.max(image1.height, image2.height);
+                canvas.width = totalWidth;
+                canvas.height = maxHeight;
+
+                // Draw images horizontally
+                ctx.drawImage(image1, 0, 0);
+                ctx.drawImage(image2, image1.width, 0);
+            } else if (direction === 'vertical') {
+                // Calculate total width and height for vertical merge
+                const maxWidth = Math.max(image1.width, image2.width);
+                const totalHeight = image1.height + image2.height;
+                canvas.width = maxWidth;
+                canvas.height = totalHeight;
+
+                // Draw images vertically
+                ctx.drawImage(image1, 0, 0);
+                ctx.drawImage(image2, 0, image1.height);
+            }
+
+            // Convert canvas to image
+            const url = canvas.toDataURL('image/jpeg', 1.0);
+            outputImage.src = url;
+            downloadLink.href = url;
+            downloadLink.style.display = 'inline-block';
+            outputImage.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
