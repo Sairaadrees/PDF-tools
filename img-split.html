@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Split images online for free. Easily split images into a grid of smaller images with our responsive image split tool. Supports JPEG, PNG, and WebP formats.">
+    <meta name="keywords" content="image split, split images, online image split, image grid, JPEG, PNG, WebP">
+    <meta name="author" content="Your Name">
+    <title>Image Splitter - Split Images Online</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Header */
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .splitter-tool {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .splitter-tool input[type="file"] {
+            display: none;
+        }
+
+        .splitter-tool label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .splitter-tool input[type="number"] {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            width: 100px;
+        }
+
+        .splitter-tool button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .splitter-tool button:hover {
+            background-color: #218838;
+        }
+
+        .output-section {
+            margin-top: 20px;
+        }
+
+        .output-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .output-section a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .output-section a:hover {
+            background-color: #0056b3;
+        }
+
+        .grid-container {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .grid-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        /* Ad Section */
+        .ad-section {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .splitter-tool {
+                padding: 15px;
+            }
+        }
+    </style>
+    <!-- Google AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Image Splitter</h1>
+        <p>Split images online for free. Easily split images into a grid of smaller images.</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Image Splitter Tool -->
+        <section class="splitter-tool">
+            <input type="file" id="image-input" accept="image/*">
+            <label for="image-input">Choose an Image</label>
+            <div>
+                <label for="rows">Rows:</label>
+                <input type="number" id="rows" placeholder="Rows" min="1" max="10">
+                <label for="columns">Columns:</label>
+                <input type="number" id="columns" placeholder="Columns" min="1" max="10">
+            </div>
+            <button id="split-button">Split Image</button>
+            <div class="output-section">
+                <div id="grid-container" class="grid-container"></div>
+            </div>
+        </section>
+
+        <!-- Ad Section -->
+        <section class="ad-section">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+                 data-ad-slot="YOUR_AD_UNIT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 Image Splitter. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const imageInput = document.getElementById('image-input');
+        const rowsInput = document.getElementById('rows');
+        const columnsInput = document.getElementById('columns');
+        const splitButton = document.getElementById('split-button');
+        const gridContainer = document.getElementById('grid-container');
+        let img = new Image();
+
+        // Handle image upload
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        gridContainer.innerHTML = ''; // Clear previous grid
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Split image
+        splitButton.addEventListener('click', () => {
+            const rows = parseInt(rowsInput.value);
+            const columns = parseInt(columnsInput.value);
+
+            if (isNaN(rows) || isNaN(columns) || rows <= 0 || columns <= 0) {
+                alert('Please enter valid rows and columns.');
+                return;
+            }
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            const tileWidth = img.width / columns;
+            const tileHeight = img.height / rows;
+
+            gridContainer.innerHTML = ''; // Clear previous grid
+            gridContainer.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < columns; col++) {
+                    const tileCanvas = document.createElement('canvas');
+                    const tileCtx = tileCanvas.getContext('2d');
+                    tileCanvas.width = tileWidth;
+                    tileCanvas.height = tileHeight;
+
+                    tileCtx.drawImage(
+                        canvas,
+                        col * tileWidth,
+                        row * tileHeight,
+                        tileWidth,
+                        tileHeight,
+                        0,
+                        0,
+                        tileWidth,
+                        tileHeight
+                    );
+
+                    const tileImg = document.createElement('img');
+                    tileImg.src = tileCanvas.toDataURL('image/jpeg', 1.0);
+                    tileImg.alt = `Tile ${row + 1}-${col + 1}`;
+                    gridContainer.appendChild(tileImg);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
