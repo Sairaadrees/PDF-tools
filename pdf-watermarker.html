@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add watermarks to PDF files online. Add text or image watermarks to your PDFs quickly and easily.">
+    <meta name="keywords" content="PDF Watermark, Add Watermark to PDF, Text Watermark, Image Watermark, Online PDF Tool">
+    <meta name="author" content="Your Name">
+    <title>PDF Watermark - Add Watermarks to PDF Files Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+
+        #upload-section, #watermark-section, #result-section {
+            margin-bottom: 20px;
+        }
+
+        input[type="file"], input[type="text"], select {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #result-section {
+            display: none;
+        }
+
+        #download-link {
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Ad Section Styling */
+        #ad-section {
+            margin: 20px auto;
+            max-width: 728px;
+        }
+    </style>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_AD_UNIT_ID" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h1>PDF Watermark</h1>
+        <p>Add watermarks to PDF files online. Add text or image watermarks to your PDFs quickly and easily.</p>
+    </header>
+
+    <main>
+        <!-- Upload Section -->
+        <section id="upload-section">
+            <h2>Step 1: Upload PDF File</h2>
+            <input type="file" id="pdf-file" accept="application/pdf">
+            <button id="upload-btn">Upload PDF</button>
+        </section>
+
+        <!-- Watermark Section -->
+        <section id="watermark-section" style="display: none;">
+            <h2>Step 2: Add Watermark</h2>
+            <select id="watermark-type">
+                <option value="text">Text Watermark</option>
+                <option value="image">Image Watermark</option>
+            </select>
+            <input type="text" id="text-watermark" placeholder="Enter watermark text" style="display: none;">
+            <input type="file" id="image-watermark" accept="image/*" style="display: none;">
+            <button id="apply-btn">Apply Watermark</button>
+        </section>
+
+        <!-- Ad Section -->
+        <section id="ad-section">
+            <!-- Google AdSense Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="YOUR_ADSENSE_AD_UNIT_ID"
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+
+        <!-- Result Section -->
+        <section id="result-section">
+            <h2>Watermarked PDF</h2>
+            <a id="download-link" download>Download Watermarked PDF</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 PDF Watermark. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Step 1: Upload PDF
+        document.getElementById('upload-btn').addEventListener('click', function() {
+            const fileInput = document.getElementById('pdf-file');
+            if (fileInput.files.length === 0) {
+                alert('Please select a PDF file to upload.');
+                return;
+            }
+
+            // Show Watermark Section
+            document.getElementById('upload-section').style.display = 'none';
+            document.getElementById('watermark-section').style.display = 'block';
+        });
+
+        // Toggle Watermark Input Fields
+        document.getElementById('watermark-type').addEventListener('change', function() {
+            const watermarkType = this.value;
+            document.getElementById('text-watermark').style.display = watermarkType === 'text' ? 'block' : 'none';
+            document.getElementById('image-watermark').style.display = watermarkType === 'image' ? 'block' : 'none';
+        });
+
+        // Step 2: Apply Watermark
+        document.getElementById('apply-btn').addEventListener('click', function() {
+            const watermarkType = document.getElementById('watermark-type').value;
+            const fileInput = document.getElementById('pdf-file');
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('watermarkType', watermarkType);
+
+            if (watermarkType === 'text') {
+                const textWatermark = document.getElementById('text-watermark').value;
+                if (!textWatermark) {
+                    alert('Please enter watermark text.');
+                    return;
+                }
+                formData.append('text', textWatermark);
+            } else {
+                const imageWatermark = document.getElementById('image-watermark').files[0];
+                if (!imageWatermark) {
+                    alert('Please select an image for the watermark.');
+                    return;
+                }
+                formData.append('image', imageWatermark);
+            }
+
+            // Send request to backend
+            fetch('/apply-watermark', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const downloadLink = document.getElementById('download-link');
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.textContent = 'Download Watermarked PDF';
+                document.getElementById('result-section').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while applying the watermark.');
+            });
+        });
+    </script>
+
+    <!-- Backend Code (Node.js + Express + PDF-Lib) -->
+    <script type="text/javascript">
+        // Install dependencies: npm install express pdf-lib multer cors
+        const express = require('express');
+        const multer = require('multer');
+        const { PDFDocument } = require('pdf-lib');
+        const cors = require('cors');
+        const fs = require('fs');
+        const path = require('path');
+
+        const app = express();
+        const upload = multer({ dest: 'uploads/' });
+
+        app.use(cors());
+        app.use(express.static('public'));
+
+        // Apply Watermark Endpoint
+        app.post('/apply-watermark', upload.fields([{ name: 'file' }, { name: 'image' }]), async (req, res) => {
+            try {
+                const { watermarkType, text } = req.body;
+                const pdfFile = req.files['file'][0];
+                const imageFile = req.files['image'] ? req.files['image'][0] : null;
+
+                const pdfBytes = fs.readFileSync(pdfFile.path);
+                const pdfDoc = await PDFDocument.load(pdfBytes);
+
+                if (watermarkType === 'text') {
+                    const pages = pdfDoc.getPages();
+                    pages.forEach(page => {
+                        const { width, height } = page.getSize();
+                        page.drawText(text, {
+                            x: width / 2 - 50,
+                            y: height / 2,
+                            size: 30,
+                            color: pdfDoc.embedRGB(0.5, 0.5, 0.5),
+                            opacity: 0.5,
+                        });
+                    });
+                } else if (watermarkType === 'image' && imageFile) {
+                    const imageBytes = fs.readFileSync(imageFile.path);
+                    const image = await pdfDoc.embedPng(imageBytes);
+                    const pages = pdfDoc.getPages();
+                    pages.forEach(page => {
+                        const { width, height } = page.getSize();
+                        page.drawImage(image, {
+                            x: width / 2 - 100,
+                            y: height / 2 - 100,
+                            width: 200,
+                            height: 200,
+                            opacity: 0.5,
+                        });
+                    });
+                }
+
+                const watermarkedPdfBytes = await pdfDoc.save();
+                res.setHeader('Content-Type', 'application/pdf');
+                res.send(Buffer.from(watermarkedPdfBytes));
+            } catch (error) {
+                console.error(error);
+                res.status(500).send('Error applying watermark.');
+            }
+        });
+
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`Server running on http://localhost:${PORT}`);
+        });
+    </script>
+</body>
+</html>
