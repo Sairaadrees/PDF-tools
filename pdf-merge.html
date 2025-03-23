@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Merge multiple PDF files into one quickly and easily. Combine PDFs online for free.">
+    <meta name="keywords" content="PDF Merger, Merge PDF, Combine PDF, Online PDF Tool">
+    <meta name="author" content="Your Name">
+    <title>PDF Merger - Merge PDF Files Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+
+        #step-1, #step-2, #result-section {
+            margin-bottom: 20px;
+        }
+
+        input[type="number"], input[type="file"] {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #result-section {
+            display: none;
+        }
+
+        #download-link {
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Ad Section Styling */
+        #ad-section {
+            margin: 20px auto;
+            max-width: 728px;
+        }
+    </style>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_AD_UNIT_ID" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h1>PDF Merger</h1>
+        <p>Merge multiple PDF files into one quickly and easily.</p>
+    </header>
+
+    <main>
+        <!-- Step 1: Choose Number of PDFs -->
+        <section id="step-1">
+            <h2>Step 1: Choose Number of PDFs to Merge</h2>
+            <input type="number" id="pdf-count" min="2" max="10" placeholder="Enter number of PDFs (2-10)">
+            <button id="next-btn">Next</button>
+        </section>
+
+        <!-- Step 2: Upload PDFs -->
+        <section id="step-2" style="display: none;">
+            <h2>Step 2: Upload PDF Files</h2>
+            <div id="file-inputs"></div>
+            <button id="merge-btn">Merge PDFs</button>
+        </section>
+
+        <!-- Ad Section -->
+        <section id="ad-section">
+            <!-- Google AdSense Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="YOUR_ADSENSE_AD_UNIT_ID"
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+
+        <!-- Result Section -->
+        <section id="result-section">
+            <h2>Merged PDF</h2>
+            <a id="download-link" download>Download Merged PDF</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 PDF Merger. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Step 1: Choose Number of PDFs
+        document.getElementById('next-btn').addEventListener('click', function() {
+            const pdfCount = document.getElementById('pdf-count').value;
+            if (pdfCount < 2 || pdfCount > 10) {
+                alert('Please enter a number between 2 and 10.');
+                return;
+            }
+
+            // Show Step 2
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'block';
+
+            // Create file input fields
+            const fileInputs = document.getElementById('file-inputs');
+            fileInputs.innerHTML = ''; // Clear previous inputs
+            for (let i = 1; i <= pdfCount; i++) {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'application/pdf';
+                input.required = true;
+                input.id = `pdf-file-${i}`;
+                input.placeholder = `Upload PDF File ${i}`;
+                fileInputs.appendChild(input);
+                fileInputs.appendChild(document.createElement('br'));
+            }
+        });
+
+        // Step 2: Merge PDFs
+        document.getElementById('merge-btn').addEventListener('click', function() {
+            const fileInputs = document.querySelectorAll('input[type="file"]');
+            const files = [];
+            let isValid = true;
+
+            fileInputs.forEach(input => {
+                if (input.files.length === 0) {
+                    isValid = false;
+                    alert('Please upload all PDF files.');
+                    return;
+                }
+                files.push(input.files[0]);
+            });
+
+            if (!isValid) return;
+
+            const formData = new FormData();
+            files.forEach((file, index) => {
+                formData.append(`file${index + 1}`, file);
+            });
+
+            // Replace with your backend endpoint for PDF merging
+            fetch('https://your-backend-api.com/merge', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const downloadLink = document.getElementById('download-link');
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.textContent = 'Download Merged PDF';
+                document.getElementById('result-section').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while merging the PDFs.');
+            });
+        });
+    </script>
+</body>
+</html>
