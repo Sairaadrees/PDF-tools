@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert files to PDF quickly and easily. Supports Word, Excel, Images, and more.">
+    <meta name="keywords" content="PDF Converter, Convert to PDF, Word to PDF, Excel to PDF, Image to PDF">
+    <meta name="author" content="Your Name">
+    <title>PDF Converter - Convert Files to PDF Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+
+        #upload-section, #result-section {
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #result-section {
+            display: none;
+        }
+
+        #download-link {
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Ad Section Styling */
+        #ad-section {
+            margin: 20px auto;
+            max-width: 728px;
+        }
+    </style>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_AD_UNIT_ID" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h1>PDF Converter</h1>
+        <p>Convert files to PDF quickly and easily. Supports Word, Excel, Images, and more.</p>
+    </header>
+
+    <main>
+        <!-- Upload Section -->
+        <section id="upload-section">
+            <h2>Step 1: Upload File</h2>
+            <input type="file" id="file-input" accept=".doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
+            <button id="convert-btn">Convert to PDF</button>
+        </section>
+
+        <!-- Ad Section -->
+        <section id="ad-section">
+            <!-- Google AdSense Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="YOUR_ADSENSE_AD_UNIT_ID"
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+
+        <!-- Result Section -->
+        <section id="result-section">
+            <h2>Converted PDF</h2>
+            <a id="download-link" download>Download PDF</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 PDF Converter. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Convert File to PDF
+        document.getElementById('convert-btn').addEventListener('click', function() {
+            const fileInput = document.getElementById('file-input');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file to convert.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Replace with your backend endpoint for PDF conversion
+            fetch('https://your-backend-api.com/convert', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const downloadLink = document.getElementById('download-link');
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.textContent = 'Download PDF';
+                document.getElementById('result-section').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while converting the file.');
+            });
+        });
+    </script>
+</body>
+</html>
