@@ -1,3 +1,28 @@
+from flask import Flask, request, jsonify, send_file, send_from_directory, after_this_request
+import os
+import uuid
+from io import BytesIO
+from pdf2image import convert_from_bytes
+from PIL import Image, ImageEnhance, ImageOps
+import img2pdf
+import tempfile
+import shutil
+
+app = Flask(__name__, static_folder='static')
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50MB max file size
+app.config['UPLOAD_FOLDER'] = tempfile.mkdtemp()
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+
+# Cleanup function to remove temporary files
+def cleanup(temp_dir):
+    try:
+        shutil.rmtree(temp_dir)
+    except Exception as e:
+        app.logger.error(f"Error cleaning up temp directory: {e}")
+
+@app.route('/')
+def index():
+    return """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,79 +34,155 @@
     <title>PDF Filter - Apply Filters to PDF Files Online</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f8f9fa;
             color: #333;
+            line-height: 1.6;
         }
 
         header {
-            background-color: #007BFF;
+            background: linear-gradient(135deg, #4361ee, #3f37c9);
             color: white;
-            padding: 20px;
+            padding: 2rem 1rem;
             text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
         }
 
         main {
-            padding: 20px;
-            text-align: center;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
 
-        #upload-section, #filter-section, #result-section {
-            margin-bottom: 20px;
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
         }
 
-        input[type="file"], select {
-            margin-bottom: 10px;
-            padding: 10px;
-            width: 80%;
+        .hidden {
+            display: none;
+        }
+
+        .file-input-wrapper {
+            margin: 1.5rem 0;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #4361ee;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .file-input-label:hover {
+            background-color: #3a56d4;
+            transform: translateY(-2px);
+        }
+
+        #pdf-file {
+            display: none;
+        }
+
+        select, button {
+            padding: 12px 24px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            margin: 0.5rem 0;
+            width: 100%;
             max-width: 300px;
         }
 
         button {
-            padding: 10px 20px;
-            background-color: #28a745;
+            background-color: #4cc9f0;
             color: white;
             border: none;
             cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
         button:hover {
-            background-color: #218838;
+            background-color: #3ab7dd;
+            transform: translateY(-2px);
         }
 
-        #result-section {
-            display: none;
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
         }
 
         #download-link {
-            padding: 10px 20px;
-            background-color: #17a2b8;
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #38b000;
             color: white;
             text-decoration: none;
-            display: inline-block;
-            margin-top: 10px;
+            border-radius: 4px;
+            margin-top: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        #download-link:hover {
+            background-color: #32a000;
+            transform: translateY(-2px);
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 300px;
+            background-color: #f1f1f1;
+            border-radius: 4px;
+            margin: 1rem auto;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #4cc9f0;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .status {
+            margin: 1rem 0;
+            font-weight: 500;
         }
 
         footer {
-            background-color: #333;
+            background-color: #212529;
             color: white;
             text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            padding: 1.5rem;
+            margin-top: 2rem;
         }
 
-        /* Ad Section Styling */
-        #ad-section {
-            margin: 20px auto;
-            max-width: 728px;
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
         }
     </style>
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_AD_UNIT_ID" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
@@ -91,88 +192,305 @@
 
     <main>
         <!-- Upload Section -->
-        <section id="upload-section">
+        <section id="upload-section" class="section">
             <h2>Step 1: Upload PDF File</h2>
-            <input type="file" id="pdf-file" accept="application/pdf">
-            <button id="upload-btn">Upload PDF</button>
+            <div class="file-input-wrapper">
+                <label for="pdf-file" class="file-input-label">Choose PDF File</label>
+                <input type="file" id="pdf-file" accept="application/pdf">
+            </div>
+            <p id="file-info" class="status">No file selected</p>
+            <button id="upload-btn" disabled>Process PDF</button>
         </section>
 
         <!-- Filter Section -->
-        <section id="filter-section" style="display: none;">
+        <section id="filter-section" class="section hidden">
             <h2>Step 2: Apply Filter</h2>
             <select id="filter-select">
                 <option value="grayscale">Grayscale</option>
                 <option value="sepia">Sepia</option>
-                <option value="brightness">Brightness</option>
+                <option value="brightness">Brightness +20%</option>
+                <option value="contrast">Contrast +20%</option>
+                <option value="invert">Invert Colors</option>
             </select>
+            <div class="progress-container hidden" id="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <p id="status" class="status">Ready to apply filter</p>
             <button id="apply-btn">Apply Filter</button>
         </section>
 
-        <!-- Ad Section -->
-        <section id="ad-section">
-            <!-- Google AdSense Ad Unit -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="YOUR_ADSENSE_AD_UNIT_ID"
-                 data-ad-slot="YOUR_AD_SLOT_ID"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </section>
-
         <!-- Result Section -->
-        <section id="result-section">
-            <h2>Filtered PDF</h2>
+        <section id="result-section" class="section hidden">
+            <h2>Your Filtered PDF is Ready!</h2>
+            <p id="result-status" class="status">Filter applied successfully</p>
             <a id="download-link" download>Download Filtered PDF</a>
+            <button id="new-file-btn" style="display: block; margin: 1rem auto;">Process Another PDF</button>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2023 PDF Filter. All rights reserved.</p>
+        <p>&copy; 2023 PDF Filter Tool. All rights reserved.</p>
     </footer>
 
     <script>
-        // Step 1: Upload PDF
-        document.getElementById('upload-btn').addEventListener('click', function() {
-            const fileInput = document.getElementById('pdf-file');
-            if (fileInput.files.length === 0) {
-                alert('Please select a PDF file to upload.');
+        // DOM Elements
+        const pdfFileInput = document.getElementById('pdf-file');
+        const uploadBtn = document.getElementById('upload-btn');
+        const filterSection = document.getElementById('filter-section');
+        const resultSection = document.getElementById('result-section');
+        const applyBtn = document.getElementById('apply-btn');
+        const downloadLink = document.getElementById('download-link');
+        const newFileBtn = document.getElementById('new-file-btn');
+        const fileInfo = document.getElementById('file-info');
+        const statusText = document.getElementById('status');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+
+        // File selection handler
+        pdfFileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                const file = this.files[0];
+                fileInfo.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                uploadBtn.disabled = false;
+            } else {
+                fileInfo.textContent = 'No file selected';
+                uploadBtn.disabled = true;
+            }
+        });
+
+        // Upload button handler
+        uploadBtn.addEventListener('click', function() {
+            document.getElementById('upload-section').classList.add('hidden');
+            filterSection.classList.remove('hidden');
+        });
+
+        // Apply filter button handler
+        applyBtn.addEventListener('click', async function() {
+            const filter = document.getElementById('filter-select').value;
+            const file = pdfFileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a PDF file first.');
                 return;
             }
 
-            // Show Filter Section
-            document.getElementById('upload-section').style.display = 'none';
-            document.getElementById('filter-section').style.display = 'block';
+            // Show progress bar
+            progressContainer.classList.remove('hidden');
+            applyBtn.disabled = true;
+            statusText.textContent = 'Processing PDF...';
+
+            try {
+                // Create FormData to send the file
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('filter', filter);
+
+                // Create XMLHttpRequest for progress tracking
+                const xhr = new XMLHttpRequest();
+                
+                xhr.upload.addEventListener('progress', function(e) {
+                    if (e.lengthComputable) {
+                        const percentComplete = (e.loaded / e.total) * 100;
+                        progressBar.style.width = percentComplete + '%';
+                    }
+                });
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            // Success - show download link
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                statusText.textContent = 'Processing complete!';
+                                downloadLink.href = response.download_url;
+                                downloadLink.textContent = `Download ${response.filename}`;
+                                filterSection.classList.add('hidden');
+                                resultSection.classList.remove('hidden');
+                            } else {
+                                throw new Error(response.error || 'Unknown error occurred');
+                            }
+                        } else {
+                            throw new Error(xhr.statusText || 'Server error');
+                        }
+                    }
+                };
+
+                xhr.open('POST', '/apply_filter', true);
+                xhr.send(formData);
+
+            } catch (error) {
+                console.error('Error:', error);
+                statusText.textContent = `Error: ${error.message}`;
+                applyBtn.disabled = false;
+                progressContainer.classList.add('hidden');
+            }
         });
 
-        // Step 2: Apply Filter
-        document.getElementById('apply-btn').addEventListener('click', function() {
-            const filter = document.getElementById('filter-select').value;
-            const fileInput = document.getElementById('pdf-file');
-            const file = fileInput.files[0];
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('filter', filter);
-
-            // Replace with your backend endpoint for PDF filtering
-            fetch('https://your-backend-api.com/apply-filter', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.blob())
-            .then(blob => {
-                const downloadLink = document.getElementById('download-link');
-                downloadLink.href = URL.createObjectURL(blob);
-                downloadLink.textContent = 'Download Filtered PDF';
-                document.getElementById('result-section').style.display = 'block';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while applying the filter.');
-            });
+        // New file button handler
+        newFileBtn.addEventListener('click', function() {
+            // Reset the form
+            pdfFileInput.value = '';
+            fileInfo.textContent = 'No file selected';
+            uploadBtn.disabled = true;
+            progressBar.style.width = '0%';
+            statusText.textContent = 'Ready to apply filter';
+            applyBtn.disabled = false;
+            
+            // Show upload section
+            resultSection.classList.add('hidden');
+            filterSection.classList.add('hidden');
+            document.getElementById('upload-section').classList.remove('hidden');
         });
     </script>
 </body>
 </html>
+    """
+
+@app.route('/apply_filter', methods=['POST'])
+def apply_filter():
+    if 'file' not in request.files:
+        return jsonify({'success': False, 'error': 'No file uploaded'}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'success': False, 'error': 'No selected file'}), 400
+    
+    if not file.filename.lower().endswith('.pdf'):
+        return jsonify({'success': False, 'error': 'File must be a PDF'}), 400
+    
+    filter_type = request.form.get('filter', 'grayscale')
+    
+    try:
+        # Create a temporary directory for this request
+        temp_dir = tempfile.mkdtemp(dir=app.config['UPLOAD_FOLDER'])
+        
+        # Read the PDF file
+        pdf_bytes = file.read()
+        
+        # Convert PDF to images (one per page)
+        images = convert_from_bytes(
+            pdf_bytes,
+            dpi=200,  # Lower DPI for faster processing (adjust as needed)
+            thread_count=4,  # Use multiple threads for faster processing
+            output_folder=temp_dir,
+            fmt='jpeg',
+            jpegopt={'quality': 90, 'optimize': True, 'progressive': True}
+        )
+        
+        processed_images = []
+        
+        # Apply filter to each image
+        for i, image in enumerate(images):
+            # Apply the selected filter
+            if filter_type == 'grayscale':
+                processed_img = ImageOps.grayscale(image)
+            elif filter_type == 'sepia':
+                # Sepia tone conversion
+                sepia = image.convert('RGB')
+                width, height = sepia.size
+                pixels = sepia.load()
+                for py in range(height):
+                    for px in range(width):
+                        r, g, b = sepia.getpixel((px, py))
+                        tr = int(0.393 * r + 0.769 * g + 0.189 * b)
+                        tg = int(0.349 * r + 0.686 * g + 0.168 * b)
+                        tb = int(0.272 * r + 0.534 * g + 0.131 * b)
+                        pixels[px, py] = (
+                            min(255, tr),
+                            min(255, tg),
+                            min(255, tb)
+                        )
+                processed_img = sepia
+            elif filter_type == 'brightness':
+                enhancer = ImageEnhance.Brightness(image)
+                processed_img = enhancer.enhance(1.2)  # 20% brighter
+            elif filter_type == 'contrast':
+                enhancer = ImageEnhance.Contrast(image)
+                processed_img = enhancer.enhance(1.2)  # 20% more contrast
+            elif filter_type == 'invert':
+                processed_img = ImageOps.invert(image.convert('RGB'))
+            else:
+                processed_img = image  # Default no filter
+            
+            processed_images.append(processed_img)
+        
+        # Convert processed images back to PDF
+        output_pdf_bytes = img2pdf.convert(
+            [image for image in processed_images],
+            dpi=200,
+            x=None,
+            y=None
+        )
+        
+        # Generate a unique filename
+        filename = f"filtered_{filter_type}_{uuid.uuid4().hex[:8]}.pdf"
+        output_path = os.path.join(temp_dir, filename)
+        
+        # Save the PDF temporarily
+        with open(output_path, 'wb') as f:
+            f.write(output_pdf_bytes)
+        
+        # Register cleanup after response
+        @after_this_request
+        def remove_temp_files(response):
+            cleanup(temp_dir)
+            return response
+        
+        # Create download URL
+        download_url = f"/download/{filename}"
+        
+        return jsonify({
+            'success': True,
+            'filename': filename,
+            'download_url': download_url
+        })
+        
+    except Exception as e:
+        # Clean up if error occurs
+        if 'temp_dir' in locals():
+            cleanup(temp_dir)
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    try:
+        # Security check - prevent directory traversal
+        if '..' in filename or filename.startswith('/'):
+            return "Invalid filename", 400
+            
+        # Look for file in any temp directory
+        for root, dirs, files in os.walk(app.config['UPLOAD_FOLDER']):
+            if filename in files:
+                file_path = os.path.join(root, filename)
+                
+                @after_this_request
+                def cleanup_after_download(response):
+                    try:
+                        os.unlink(file_path)
+                        # Try to remove the directory if empty
+                        try:
+                            os.rmdir(os.path.dirname(file_path))
+                        except OSError:
+                            pass
+                    except Exception as e:
+                        app.logger.error(f"Error cleaning up downloaded file: {e}")
+                    return response
+                
+                return send_file(
+                    file_path,
+                    as_attachment=True,
+                    download_name=f"filtered_{filename}",
+                    mimetype='application/pdf'
+                )
+        
+        return "File not found", 404
+        
+    except Exception as e:
+        return str(e), 500
+
+if __name__ == '__main__':
+    # Create upload folder if it doesn't exist
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    
+    # Run the app
+    app.run(host='0.0.0.0', port=5000, threaded=True)
