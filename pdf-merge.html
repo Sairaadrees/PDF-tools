@@ -3,198 +3,388 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Merge multiple PDF files into one quickly and easily. Combine PDFs online for free.">
-    <meta name="keywords" content="PDF Merger, Merge PDF, Combine PDF, Online PDF Tool">
-    <meta name="author" content="Your Name">
-    <title>PDF Merger - Merge PDF Files Online</title>
+    <title>PDF Merger Tool</title>
     <style>
+        :root {
+            --primary: #4a6bff;
+            --secondary: #3a56d4;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+        
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            padding: 20px;
+            background-color: var(--light);
         }
-
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
         header {
-            background-color: #007BFF;
-            color: white;
-            padding: 20px;
             text-align: center;
+            margin-bottom: 30px;
         }
-
-        main {
-            padding: 20px;
+        
+        h1 {
+            color: var(--primary);
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            padding: 30px;
             text-align: center;
+            background-color: white;
+            margin-bottom: 20px;
+            transition: all 0.3s;
         }
-
-        #step-1, #step-2, #result-section {
+        
+        .upload-area.highlight {
+            background-color: rgba(74, 107, 255, 0.1);
+        }
+        
+        #file-inputs {
             margin-bottom: 20px;
         }
-
-        input[type="number"], input[type="file"] {
-            margin-bottom: 10px;
-            padding: 10px;
-            width: 80%;
-            max-width: 300px;
+        
+        .file-input-container {
+            margin-bottom: 15px;
         }
-
-        button {
+        
+        .file-input-label {
+            display: inline-block;
             padding: 10px 20px;
-            background-color: #28a745;
+            background-color: var(--primary);
             color: white;
-            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            transition: all 0.3s;
         }
-
-        button:hover {
-            background-color: #218838;
+        
+        .file-input-label:hover {
+            background-color: var(--secondary);
         }
-
-        #result-section {
+        
+        .file-input {
             display: none;
         }
-
-        #download-link {
+        
+        .add-more-btn {
             padding: 10px 20px;
-            background-color: #17a2b8;
+            background-color: var(--light);
+            border: 1px solid var(--gray);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .files-list {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        
+        .file-name {
+            flex-grow: 1;
+        }
+        
+        .file-size {
+            color: var(--gray);
+            margin: 0 15px;
+        }
+        
+        .remove-btn {
+            color: red;
+            cursor: pointer;
+        }
+        
+        .merge-btn {
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .merge-btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        .merge-btn:disabled {
+            background-color: var(--gray);
+            cursor: not-allowed;
+        }
+        
+        .progress-container {
+            display: none;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .result-section {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--success);
             color: white;
             text-decoration: none;
-            display: inline-block;
-            margin-top: 10px;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        /* Ad Section Styling */
-        #ad-section {
-            margin: 20px auto;
-            max-width: 728px;
+            border-radius: 5px;
+            margin: 10px;
         }
     </style>
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_AD_UNIT_ID" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>
-        <h1>PDF Merger</h1>
-        <p>Merge multiple PDF files into one quickly and easily.</p>
-    </header>
-
-    <main>
-        <!-- Step 1: Choose Number of PDFs -->
-        <section id="step-1">
-            <h2>Step 1: Choose Number of PDFs to Merge</h2>
-            <input type="number" id="pdf-count" min="2" max="10" placeholder="Enter number of PDFs (2-10)">
-            <button id="next-btn">Next</button>
-        </section>
-
-        <!-- Step 2: Upload PDFs -->
-        <section id="step-2" style="display: none;">
-            <h2>Step 2: Upload PDF Files</h2>
-            <div id="file-inputs"></div>
-            <button id="merge-btn">Merge PDFs</button>
-        </section>
-
-        <!-- Ad Section -->
-        <section id="ad-section">
-            <!-- Google AdSense Ad Unit -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="YOUR_ADSENSE_AD_UNIT_ID"
-                 data-ad-slot="YOUR_AD_SLOT_ID"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </section>
-
-        <!-- Result Section -->
-        <section id="result-section">
-            <h2>Merged PDF</h2>
-            <a id="download-link" download>Download Merged PDF</a>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2023 PDF Merger. All rights reserved.</p>
-    </footer>
+    <div class="container">
+        <header>
+            <h1>PDF Merger Tool</h1>
+            <p>Combine multiple PDF files into one document</p>
+        </header>
+        
+        <div class="upload-area" id="upload-area">
+            <div id="file-inputs">
+                <div class="file-input-container">
+                    <label class="file-input-label" for="file-input-0">Select PDF File 1</label>
+                    <input type="file" class="file-input" id="file-input-0" accept="application/pdf">
+                </div>
+            </div>
+            <button class="add-more-btn" id="add-more-btn">Add More PDFs</button>
+        </div>
+        
+        <div class="files-list" id="files-list">
+            <h3>Selected Files:</h3>
+            <div id="files-list-items"></div>
+        </div>
+        
+        <div style="text-align: center;">
+            <button class="merge-btn" id="merge-btn" disabled>Merge PDFs</button>
+        </div>
+        
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <p id="progress-text">Processing...</p>
+        </div>
+        
+        <div class="result-section" id="result-section">
+            <h2>Merge Complete!</h2>
+            <a href="#" class="download-btn" id="download-btn">Download Merged PDF</a>
+        </div>
+    </div>
 
     <script>
-        // Step 1: Choose Number of PDFs
-        document.getElementById('next-btn').addEventListener('click', function() {
-            const pdfCount = document.getElementById('pdf-count').value;
-            if (pdfCount < 2 || pdfCount > 10) {
-                alert('Please enter a number between 2 and 10.');
-                return;
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const uploadArea = document.getElementById('upload-area');
+            const fileInputsContainer = document.getElementById('file-inputs');
+            const addMoreBtn = document.getElementById('add-more-btn');
+            const filesList = document.getElementById('files-list');
+            const filesListItems = document.getElementById('files-list-items');
+            const mergeBtn = document.getElementById('merge-btn');
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress');
+            const progressText = document.getElementById('progress-text');
+            const resultSection = document.getElementById('result-section');
+            const downloadBtn = document.getElementById('download-btn');
+            
+            // Variables
+            let pdfFiles = [];
+            let fileCount = 1;
+            
+            // Initialize first file input
+            document.getElementById('file-input-0').addEventListener('change', handleFileSelect);
+            
+            // Set up drag and drop
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('highlight');
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                uploadArea.classList.remove('highlight');
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('highlight');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    // Add all dropped files
+                    for (let i = 0; i < files.length; i++) {
+                        if (files[i].type === 'application/pdf') {
+                            if (!pdfFiles[i]) {
+                                addFileInput();
+                            }
+                            const input = document.querySelector(`.file-input[data-index="${i}"]`);
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(files[i]);
+                            input.files = dataTransfer.files;
+                            handleFileSelect({ target: input });
+                        }
+                    }
+                }
+            });
+            
+            // Add more files button
+            addMoreBtn.addEventListener('click', addFileInput);
+            
+            // Merge button
+            mergeBtn.addEventListener('click', mergePDFs);
+            
+            // Functions
+            function addFileInput() {
+                const newInput = document.createElement('div');
+                newInput.className = 'file-input-container';
+                newInput.innerHTML = `
+                    <label class="file-input-label" for="file-input-${fileCount}">Select PDF File ${fileCount + 1}</label>
+                    <input type="file" class="file-input" id="file-input-${fileCount}" accept="application/pdf" data-index="${fileCount}">
+                `;
+                fileInputsContainer.appendChild(newInput);
+                
+                // Add event listener to the new input
+                document.getElementById(`file-input-${fileCount}`).addEventListener('change', handleFileSelect);
+                
+                fileCount++;
             }
-
-            // Show Step 2
-            document.getElementById('step-1').style.display = 'none';
-            document.getElementById('step-2').style.display = 'block';
-
-            // Create file input fields
-            const fileInputs = document.getElementById('file-inputs');
-            fileInputs.innerHTML = ''; // Clear previous inputs
-            for (let i = 1; i <= pdfCount; i++) {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'application/pdf';
-                input.required = true;
-                input.id = `pdf-file-${i}`;
-                input.placeholder = `Upload PDF File ${i}`;
-                fileInputs.appendChild(input);
-                fileInputs.appendChild(document.createElement('br'));
+            
+            function handleFileSelect(event) {
+                const input = event.target;
+                const index = input.dataset.index || 0;
+                
+                if (input.files.length > 0) {
+                    const file = input.files[0];
+                    
+                    // Validate file type
+                    if (file.type !== 'application/pdf') {
+                        alert('Please select a PDF file.');
+                        input.value = '';
+                        return;
+                    }
+                    
+                    // Store the file
+                    pdfFiles[index] = file;
+                    
+                    // Update files list
+                    updateFilesList();
+                    
+                    // Enable merge button if we have at least 2 files
+                    if (pdfFiles.filter(Boolean).length >= 2) {
+                        mergeBtn.disabled = false;
+                    }
+                }
             }
-        });
-
-        // Step 2: Merge PDFs
-        document.getElementById('merge-btn').addEventListener('click', function() {
-            const fileInputs = document.querySelectorAll('input[type="file"]');
-            const files = [];
-            let isValid = true;
-
-            fileInputs.forEach(input => {
-                if (input.files.length === 0) {
-                    isValid = false;
-                    alert('Please upload all PDF files.');
+            
+            function updateFilesList() {
+                filesListItems.innerHTML = '';
+                let hasFiles = false;
+                
+                pdfFiles.forEach((file, index) => {
+                    if (file) {
+                        hasFiles = true;
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'file-item';
+                        fileItem.innerHTML = `
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                            <div class="remove-btn" data-index="${index}">✕</div>
+                        `;
+                        filesListItems.appendChild(fileItem);
+                    }
+                });
+                
+                // Show/hide files list
+                filesList.style.display = hasFiles ? 'block' : 'none';
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = this.dataset.index;
+                        pdfFiles[index] = null;
+                        document.querySelector(`.file-input[data-index="${index}"]`).value = '';
+                        updateFilesList();
+                        
+                        // Disable merge button if we have less than 2 files
+                        if (pdfFiles.filter(Boolean).length < 2) {
+                            mergeBtn.disabled = true;
+                        }
+                    });
+                });
+            }
+            
+            function mergePDFs() {
+                const validFiles = pdfFiles.filter(Boolean);
+                
+                if (validFiles.length < 2) {
+                    alert('Please select at least 2 PDF files to merge.');
                     return;
                 }
-                files.push(input.files[0]);
-            });
-
-            if (!isValid) return;
-
-            const formData = new FormData();
-            files.forEach((file, index) => {
-                formData.append(`file${index + 1}`, file);
-            });
-
-            // Replace with your backend endpoint for PDF merging
-            fetch('https://your-backend-api.com/merge', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.blob())
-            .then(blob => {
-                const downloadLink = document.getElementById('download-link');
-                downloadLink.href = URL.createObjectURL(blob);
-                downloadLink.textContent = 'Download Merged PDF';
-                document.getElementById('result-section').style.display = 'block';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while merging the PDFs.');
-            });
+                
+                // Show progress
+                progressContainer.style.display = 'block';
+                mergeBtn.disabled = true;
+                
+                // Simulate merging process
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 5;
+                    progressBar.style.width = `${progress}%`;
+                    progressText.textContent = `Processing... ${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            // Create a dummy download (in a real app, you would generate the actual merged PDF)
+                            const blob = new Blob(['This would be the merged PDF content'], { type: 'application/pdf' });
+                            downloadBtn.href = URL.createObjectURL(blob);
+                            downloadBtn.download = 'merged_document.pdf';
+                            
+                            // Show result
+                            progressContainer.style.display = 'none';
+                            resultSection.style.display = 'block';
+                        }, 500);
+                    }
+                }, 100);
+            }
         });
     </script>
 </body>
