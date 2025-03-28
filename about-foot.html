@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Toolkit Pro - Your Online Tools Solution</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --white: #ffffff;
+            --bg: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 3rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        /* Main Content */
+        .about-content {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-light);
+        }
+        
+        h3 {
+            color: var(--dark);
+            margin: 2rem 0 1rem;
+            font-size: 1.5rem;
+        }
+        
+        p {
+            margin-bottom: 1.25rem;
+            color: var(--gray);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--light-gray);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .team-list {
+            margin: 2rem 0;
+        }
+        
+        .team-member {
+            margin-bottom: 1.5rem;
+        }
+        
+        .team-member h4 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .team-member p {
+            margin-bottom: 0;
+            color: var(--gray);
+        }
+        
+        .cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .cta h2 {
+            color: white;
+        }
+        
+        .cta h2::after {
+            background-color: white;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: white;
+            color: var(--primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--gray);
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 3rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .about-content {
+                padding: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                padding: 2rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .about-content {
+                padding: 1.5rem;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="index.html" class="logo">
+                <i class="fas fa-tools"></i>
+                <span>Toolkit Pro</span>
+            </a>
+            <nav>
+                <!-- Navigation would go here -->
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>About Toolkit Pro</h1>
+            <p>Your trusted online solution for all image processing and utility needs</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <article class="about-content">
+            <h2>Our Story</h2>
+            <p>Toolkit Pro was founded in 2025 with a simple mission: to create easy-to-use, powerful online tools that help people work more efficiently. What started as a small collection of image converters has grown into a comprehensive suite of utilities used by millions worldwide.</p>
+            
+            <h3>Why Choose Toolkit Pro?</h3>
+            <p>In a world full of complicated software and expensive subscriptions, we believe in keeping things simple, accessible, and free. Our tools require no installation, no registration, and no credit card - just instant access to the tools you need.</p>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Lightning Fast</h3>
+                    <p>Our tools process files directly in your browser for maximum speed and privacy.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Privacy Focused</h3>
+                    <p>Files never leave your device unless you choose to save them elsewhere.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Free Forever</h3>
+                    <p>We're committed to keeping our core tools free with no hidden costs.</p>
+                </div>
+            </div>
+            
+            <h2>Our Tools</h2>
+            <p>Toolkit Pro offers a growing collection of utilities designed to make your digital life easier:</p>
+            
+            <h3>Image Tools</h3>
+            <ul>
+                <li>Resize, crop, and compress images</li>
+                <li>Convert between JPG, PNG, GIF, and more</li>
+                <li>Remove backgrounds automatically</li>
+                <li>Add filters and effects</li>
+            </ul>
+            
+            <h3>General Utilities</h3>
+            <ul>
+                <li>PDF conversion and compression</li>
+                <li>Document format converters</li>
+                <li>Text manipulation tools</li>
+                <li>Color pickers and generators</li>
+            </ul>
+            
+            <h2>Our Team</h2>
+            <p>Behind Toolkit Pro is a dedicated team of developers and designers committed to creating the best online tools experience.</p>
+            
+            <div class="team-list">
+                <div class="team-member">
+                    <h4>Saira Adrees</h4>
+                    <p>Founder & Lead Developer</p>
+                </div>
+                
+                <div class="team-member">
+                    <h4>Amal Noor</h4>
+                    <p>UI/UX Designer</p>
+                </div>
+                
+                <div class="team-member">
+                    <h4>Tahreem Khan</h4>
+                    <p>Product Manager</p>
+                </div>
+            </div>
+        </article>
+        
+        <section class="cta">
+            <h2>Ready to Try Toolkit Pro?</h2>
+            <p>Join millions of users who trust our tools for their daily needs</p>
+            <a href="/PDF/tools/index.html" class="btn">Explore Our Tools</a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="year"></span> Toolkit Pro. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="/PDF-tools/terms-foot.html">Terms of Service</a>
+                <a href="/PDF-tools/privacy-foot.html">Privacy Policy</a>
+                <a href="/PDF-tools/contact-foot.html">Contact Us</a>
+                <a href="/PDF-tools/about-foot.html">About</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Auto-update copyright year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
