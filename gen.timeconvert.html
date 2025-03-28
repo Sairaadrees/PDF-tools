@@ -1,1 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online time converter tool. Convert between years, months, days, hours, minutes, and seconds instantly.">
+    <meta name="keywords" content="time converter, year to month, hour to minute, second converter, time calculator">
+    <meta name="author" content="TimeConverterPro">
+    <title>Time Converter | Convert Years, Months, Days, Hours, Minutes & Seconds</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --ad-bg: #f1f3ff;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .time-converter-tool {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .tool-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tool-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .tool-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Main Content */
+        .tool-body {
+            padding: 20px;
+        }
+
+        /* Input Section */
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        .converter-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .converter-row input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .converter-row input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
+        }
+
+        .converter-row select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+        .convert-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .convert-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Results Section */
+        .results-section {
+            margin-top: 25px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-unit {
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .result-value {
+            font-family: monospace;
+            color: var(--primary);
+        }
+
+        /* Ad Banner */
+        .ad-banner {
+            background: var(--ad-bg);
+            padding: 12px;
+            text-align: center;
+            border-top: 1px dashed #ddd;
+        }
+
+        .ad-banner p {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        .tool-footer {
+            text-align: center;
+            padding: 15px;
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.5rem;
+            }
+            .converter-row {
+                flex-direction: column;
+            }
+            .converter-row input, 
+            .converter-row select {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .tool-header h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="time-converter-tool">
+        <!-- Header -->
+        <div class="tool-header">
+            <h1>Time Converter</h1>
+            <p>Convert between years, months, days, hours, minutes, and seconds</p>
+        </div>
+
+        <!-- Main Body -->
+        <div class="tool-body">
+            <!-- Input Section -->
+            <div class="input-section">
+                <div class="converter-row">
+                    <input type="number" id="input-value" placeholder="Enter value" value="1">
+                    <select id="input-unit">
+                        <option value="seconds">Seconds</option>
+                        <option value="minutes">Minutes</option>
+                        <option value="hours">Hours</option>
+                        <option value="days">Days</option>
+                        <option value="weeks">Weeks</option>
+                        <option value="months" selected>Months</option>
+                        <option value="years">Years</option>
+                    </select>
+                </div>
+                <button class="convert-btn" id="convert-btn">Convert</button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="results-section">
+                <div class="result-item">
+                    <span class="result-unit">Years</span>
+                    <span class="result-value" id="years">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-unit">Months</span>
+                    <span class="result-value" id="months">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-unit">Weeks</span>
+                    <span class="result-value" id="weeks">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-unit">Days</span>
+                    <span class="result-value" id="days">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-unit">Hours</span>
+                    <span class="result-value" id="hours">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-unit">Minutes</span>
+                    <span class="result-value" id="minutes">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-unit">Seconds</span>
+                    <span class="result-value" id="seconds">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Banner (Moved to end) -->
+        <div class="ad-banner">
+            <p>Advertisement</p>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                data-ad-slot="YOUR_AD_SLOT_ID"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Footer -->
+        <div class="tool-footer">
+            <p>© 2023 TimeConverterPro | All calculations happen in your browser</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const inputValue = document.getElementById('input-value');
+            const inputUnit = document.getElementById('input-unit');
+            const convertBtn = document.getElementById('convert-btn');
+            const years = document.getElementById('years');
+            const months = document.getElementById('months');
+            const weeks = document.getElementById('weeks');
+            const days = document.getElementById('days');
+            const hours = document.getElementById('hours');
+            const minutes = document.getElementById('minutes');
+            const seconds = document.getElementById('seconds');
+
+            // Conversion factors (in seconds)
+            const conversionFactors = {
+                seconds: 1,
+                minutes: 60,
+                hours: 3600,
+                days: 86400,
+                weeks: 604800,
+                months: 2629800, // Average month (30.44 days)
+                years: 31557600  // Average year (365.25 days)
+            };
+
+            // Convert time
+            function convertTime() {
+                const value = parseFloat(inputValue.value) || 0;
+                const unit = inputUnit.value;
+                const valueInSeconds = value * conversionFactors[unit];
+                
+                // Calculate all conversions
+                const yearsValue = valueInSeconds / conversionFactors.years;
+                const monthsValue = valueInSeconds / conversionFactors.months;
+                const weeksValue = valueInSeconds / conversionFactors.weeks;
+                const daysValue = valueInSeconds / conversionFactors.days;
+                const hoursValue = valueInSeconds / conversionFactors.hours;
+                const minutesValue = valueInSeconds / conversionFactors.minutes;
+                const secondsValue = valueInSeconds;
+                
+                // Update results
+                years.textContent = yearsValue.toFixed(6).replace(/\.?0+$/, '');
+                months.textContent = monthsValue.toFixed(6).replace(/\.?0+$/, '');
+                weeks.textContent = weeksValue.toFixed(6).replace(/\.?0+$/, '');
+                days.textContent = daysValue.toFixed(6).replace(/\.?0+$/, '');
+                hours.textContent = hoursValue.toFixed(6).replace(/\.?0+$/, '');
+                minutes.textContent = minutesValue.toFixed(6).replace(/\.?0+$/, '');
+                seconds.textContent = secondsValue.toFixed(6).replace(/\.?0+$/, '');
+            }
+
+            // Event Listeners
+            convertBtn.addEventListener('click', convertTime);
+            inputValue.addEventListener('input', convertTime);
+            inputUnit.addEventListener('change', convertTime);
+
+            // Initial conversion
+            convertTime();
+        });
+    </script>
+</body>
+</html>
