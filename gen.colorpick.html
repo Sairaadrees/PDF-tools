@@ -1,1 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online color picker tool. Select colors and get RGB, HEX codes instantly. Perfect for designers and developers.">
+    <meta name="keywords" content="color picker, RGB converter, HEX converter, color selector, web design tool">
+    <meta name="author" content="ColorPickerPro">
+    <title>Color Picker | Get RGB & HEX Color Codes Instantly</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --ad-bg: #f1f3ff;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .color-picker-tool {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .tool-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tool-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .tool-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Main Content */
+        .tool-body {
+            padding: 20px;
+        }
+
+        /* Color Picker Section */
+        .color-picker-section {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .color-preview {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .color-input {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Color Codes Section */
+        .color-codes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .code-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .code-box h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+
+        .code-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            font-family: monospace;
+            color: var(--dark);
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .code-value:hover {
+            background: #e9ecef;
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary);
+        }
+
+        /* Color Palette */
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .palette-color {
+            height: 60px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .palette-color:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Ad Banner */
+        .ad-banner {
+            background: var(--ad-bg);
+            padding: 12px;
+            text-align: center;
+            border-top: 1px dashed #ddd;
+        }
+
+        .ad-banner p {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        .tool-footer {
+            text-align: center;
+            padding: 15px;
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.5rem;
+            }
+            .color-preview {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .tool-header h1 {
+                font-size: 1.4rem;
+            }
+            .color-codes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="color-picker-tool">
+        <!-- Header -->
+        <div class="tool-header">
+            <h1>Color Picker</h1>
+            <p>Select colors and get RGB & HEX codes instantly</p>
+        </div>
+
+        <!-- Main Body -->
+        <div class="tool-body">
+            <!-- Color Picker Section -->
+            <div class="color-picker-section">
+                <div class="color-preview" id="color-preview" style="background-color: #4361ee;"></div>
+                <input type="color" id="color-input" class="color-input" value="#4361ee">
+            </div>
+
+            <!-- Color Codes Section -->
+            <div class="color-codes">
+                <div class="code-box">
+                    <h3>HEX Color Code</h3>
+                    <div class="code-value" id="hex-code">#4361ee</div>
+                    <button class="copy-btn" data-target="hex-code">Copy HEX</button>
+                </div>
+                <div class="code-box">
+                    <h3>RGB Color Code</h3>
+                    <div class="code-value" id="rgb-code">rgb(67, 97, 238)</div>
+                    <button class="copy-btn" data-target="rgb-code">Copy RGB</button>
+                </div>
+            </div>
+
+            <!-- Color Palette -->
+            <h3 style="margin-bottom: 15px; text-align: center;">Color Palette</h3>
+            <div class="color-palette">
+                <div class="palette-color" style="background-color: #4361ee;" data-color="#4361ee"></div>
+                <div class="palette-color" style="background-color: #3a0ca3;" data-color="#3a0ca3"></div>
+                <div class="palette-color" style="background-color: #4895ef;" data-color="#4895ef"></div>
+                <div class="palette-color" style="background-color: #4cc9f0;" data-color="#4cc9f0"></div>
+                <div class="palette-color" style="background-color: #f72585;" data-color="#f72585"></div>
+                <div class="palette-color" style="background-color: #7209b7;" data-color="#7209b7"></div>
+                <div class="palette-color" style="background-color: #560bad;" data-color="#560bad"></div>
+                <div class="palette-color" style="background-color: #480ca8;" data-color="#480ca8"></div>
+            </div>
+        </div>
+
+        <!-- Ad Banner (Moved to end) -->
+        <div class="ad-banner">
+            <p>Advertisement</p>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                data-ad-slot="YOUR_AD_SLOT_ID"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Footer -->
+        <div class="tool-footer">
+            <p>© 2023 ColorPickerPro | All processing happens in your browser</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const colorPreview = document.getElementById('color-preview');
+            const colorInput = document.getElementById('color-input');
+            const hexCode = document.getElementById('hex-code');
+            const rgbCode = document.getElementById('rgb-code');
+            const copyBtns = document.querySelectorAll('.copy-btn');
+            const paletteColors = document.querySelectorAll('.palette-color');
+
+            // Convert hex to RGB
+            function hexToRgb(hex) {
+                // Remove # if present
+                hex = hex.replace('#', '');
+                
+                // Parse r, g, b values
+                const r = parseInt(hex.substring(0, 2), 16);
+                const g = parseInt(hex.substring(2, 4), 16);
+                const b = parseInt(hex.substring(4, 6), 16);
+                
+                return `rgb(${r}, ${g}, ${b})`;
+            }
+
+            // Update color display
+            function updateColor(hex) {
+                colorPreview.style.backgroundColor = hex;
+                hexCode.textContent = hex.toUpperCase();
+                rgbCode.textContent = hexToRgb(hex);
+            }
+
+            // Copy to clipboard
+            function copyToClipboard(text) {
+                navigator.clipboard.writeText(text).then(() => {
+                    // Success feedback could be added here
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
+
+            // Event Listeners
+            colorInput.addEventListener('input', function() {
+                updateColor(this.value);
+            });
+
+            copyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const textToCopy = document.getElementById(targetId).textContent;
+                    copyToClipboard(textToCopy);
+                    
+                    // Visual feedback
+                    const originalText = this.textContent;
+                    this.textContent = 'Copied!';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 2000);
+                });
+            });
+
+            paletteColors.forEach(color => {
+                color.addEventListener('click', function() {
+                    const selectedColor = this.getAttribute('data-color');
+                    colorInput.value = selectedColor;
+                    updateColor(selectedColor);
+                });
+            });
+
+            // Initialize with default color
+            updateColor(colorInput.value);
+        });
+    </script>
+</body>
+</html>
