@@ -1,1 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online unit converter tool. Convert between different units of length, mass, and volume instantly.">
+    <meta name="keywords" content="unit converter, measurement converter, length converter, weight converter, volume converter">
+    <meta name="author" content="UnitConverterPro">
+    <title>Unit Converter | Convert Length, Mass & Volume Measurements</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --ad-bg: #f1f3ff;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .unit-converter-tool {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .tool-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tool-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .tool-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Main Content */
+        .tool-body {
+            padding: 20px;
+        }
+
+        /* Converter Section */
+        .converter-section {
+            margin-bottom: 20px;
+        }
+
+        .converter-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .converter-row input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .converter-row input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
+        }
+
+        .converter-row select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .category-selector {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .category-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Results Section */
+        .results-section {
+            margin-top: 25px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-unit {
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .result-value {
+            font-family: monospace;
+            color: var(--primary);
+        }
+
+        /* Ad Banner */
+        .ad-banner {
+            background: var(--ad-bg);
+            padding: 12px;
+            text-align: center;
+            border-top: 1px dashed #ddd;
+        }
+
+        .ad-banner p {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        .tool-footer {
+            text-align: center;
+            padding: 15px;
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.5rem;
+            }
+            .converter-row {
+                flex-direction: column;
+            }
+            .converter-row input, 
+            .converter-row select {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .tool-header h1 {
+                font-size: 1.4rem;
+            }
+            .category-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="unit-converter-tool">
+        <!-- Header -->
+        <div class="tool-header">
+            <h1>Unit Converter</h1>
+            <p>Convert between different units of length, mass and volume</p>
+        </div>
+
+        <!-- Main Body -->
+        <div class="tool-body">
+            <!-- Category Selector -->
+            <div class="category-selector">
+                <button class="category-btn active" data-category="length">Length</button>
+                <button class="category-btn" data-category="mass">Mass</button>
+                <button class="category-btn" data-category="volume">Volume</button>
+            </div>
+
+            <!-- Converter Section -->
+            <div class="converter-section">
+                <div class="converter-row">
+                    <input type="number" id="input-value" placeholder="Enter value" value="1">
+                    <select id="input-unit"></select>
+                </div>
+                <div class="converter-row">
+                    <input type="number" id="output-value" placeholder="Result" readonly>
+                    <select id="output-unit"></select>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="results-section"></div>
+        </div>
+
+        <!-- Ad Banner (Moved to end) -->
+        <div class="ad-banner">
+            <p>Advertisement</p>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                data-ad-slot="YOUR_AD_SLOT_ID"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Footer -->
+        <div class="tool-footer">
+            <p>© 2023 UnitConverterPro | All calculations happen in your browser</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Unit definitions
+            const units = {
+                length: [
+                    { name: 'Meter', symbol: 'm', factor: 1 },
+                    { name: 'Kilometer', symbol: 'km', factor: 1000 },
+                    { name: 'Centimeter', symbol: 'cm', factor: 0.01 },
+                    { name: 'Millimeter', symbol: 'mm', factor: 0.001 },
+                    { name: 'Mile', symbol: 'mi', factor: 1609.344 },
+                    { name: 'Yard', symbol: 'yd', factor: 0.9144 },
+                    { name: 'Foot', symbol: 'ft', factor: 0.3048 },
+                    { name: 'Inch', symbol: 'in', factor: 0.0254 }
+                ],
+                mass: [
+                    { name: 'Kilogram', symbol: 'kg', factor: 1 },
+                    { name: 'Gram', symbol: 'g', factor: 0.001 },
+                    { name: 'Milligram', symbol: 'mg', factor: 0.000001 },
+                    { name: 'Metric Ton', symbol: 't', factor: 1000 },
+                    { name: 'Pound', symbol: 'lb', factor: 0.453592 },
+                    { name: 'Ounce', symbol: 'oz', factor: 0.0283495 },
+                    { name: 'Stone', symbol: 'st', factor: 6.35029 }
+                ],
+                volume: [
+                    { name: 'Liter', symbol: 'L', factor: 1 },
+                    { name: 'Milliliter', symbol: 'mL', factor: 0.001 },
+                    { name: 'Cubic Meter', symbol: 'm³', factor: 1000 },
+                    { name: 'Cubic Centimeter', symbol: 'cm³', factor: 0.001 },
+                    { name: 'Gallon (US)', symbol: 'gal', factor: 3.78541 },
+                    { name: 'Quart (US)', symbol: 'qt', factor: 0.946353 },
+                    { name: 'Pint (US)', symbol: 'pt', factor: 0.473176 },
+                    { name: 'Cup (US)', symbol: 'cup', factor: 0.236588 },
+                    { name: 'Fluid Ounce (US)', symbol: 'fl oz', factor: 0.0295735 },
+                    { name: 'Tablespoon (US)', symbol: 'tbsp', factor: 0.0147868 },
+                    { name: 'Teaspoon (US)', symbol: 'tsp', factor: 0.00492892 }
+                ]
+            };
+
+            // DOM Elements
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            const inputValue = document.getElementById('input-value');
+            const inputUnit = document.getElementById('input-unit');
+            const outputValue = document.getElementById('output-value');
+            const outputUnit = document.getElementById('output-unit');
+            const resultsSection = document.getElementById('results-section');
+
+            // Current category
+            let currentCategory = 'length';
+
+            // Populate unit dropdowns
+            function populateUnits() {
+                // Clear existing options
+                inputUnit.innerHTML = '';
+                outputUnit.innerHTML = '';
+                
+                // Add new options
+                units[currentCategory].forEach((unit, index) => {
+                    const option1 = document.createElement('option');
+                    option1.value = index;
+                    option1.textContent = `${unit.name} (${unit.symbol})`;
+                    inputUnit.appendChild(option1);
+                    
+                    const option2 = document.createElement('option');
+                    option2.value = index;
+                    option2.textContent = `${unit.name} (${unit.symbol})`;
+                    outputUnit.appendChild(option2);
+                    
+                    // Set default output unit to something different than input
+                    if (index === 1) {
+                        option2.selected = true;
+                    }
+                });
+                
+                // Trigger calculation
+                calculate();
+            }
+
+            // Calculate conversions
+            function calculate() {
+                const inputIndex = parseInt(inputUnit.value);
+                const outputIndex = parseInt(outputUnit.value);
+                const value = parseFloat(inputValue.value) || 0;
+                
+                if (inputIndex === outputIndex) {
+                    outputValue.value = value;
+                } else {
+                    const inputFactor = units[currentCategory][inputIndex].factor;
+                    const outputFactor = units[currentCategory][outputIndex].factor;
+                    const result = (value * inputFactor) / outputFactor;
+                    outputValue.value = result.toFixed(8).replace(/\.?0+$/, '');
+                }
+                
+                updateResults(value, inputIndex);
+            }
+
+            // Update all results
+            function updateResults(value, inputIndex) {
+                resultsSection.innerHTML = '';
+                const inputFactor = units[currentCategory][inputIndex].factor;
+                
+                units[currentCategory].forEach((unit, index) => {
+                    if (index !== inputIndex) {
+                        const result = (value * inputFactor) / unit.factor;
+                        const resultItem = document.createElement('div');
+                        resultItem.className = 'result-item';
+                        resultItem.innerHTML = `
+                            <span class="result-unit">${unit.name} (${unit.symbol})</span>
+                            <span class="result-value">${result.toFixed(8).replace(/\.?0+$/, '')}</span>
+                        `;
+                        resultsSection.appendChild(resultItem);
+                    }
+                });
+            }
+
+            // Event Listeners
+            inputValue.addEventListener('input', calculate);
+            inputUnit.addEventListener('change', calculate);
+            outputUnit.addEventListener('change', calculate);
+            
+            // Category buttons
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCategory = this.dataset.category;
+                    populateUnits();
+                });
+            });
+
+            // Initialize
+            populateUnits();
+        });
+    </script>
+</body>
+</html>
