@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online text counter tool that counts words, characters, sentences, and paragraphs instantly. Perfect for writers, students, and professionals.">
+    <meta name="keywords" content="word counter, character counter, sentence counter, paragraph counter, text analyzer, writing tool">
+    <meta name="author" content="TextCounterPro">
+    <title>Text Counter Tool | Count Words, Characters, Sentences & Paragraphs</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --ad-bg: #f1f3ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .text-counter-tool {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .tool-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tool-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .tool-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Ad Banner */
+        .ad-banner {
+            background: var(--ad-bg);
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .ad-banner p {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        /* Main Content */
+        .tool-body {
+            padding: 20px;
+        }
+
+        /* Text Input */
+        .text-input-container {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        #text-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            resize: vertical;
+            font-size: 16px;
+            line-height: 1.5;
+            transition: all 0.3s;
+        }
+
+        #text-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
+        }
+
+        .text-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .clear-btn {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .clear-btn:hover {
+            background: #e9ecef;
+        }
+
+        .text-info {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Counter Results */
+        .counter-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .counter-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .counter-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .counter-box h3 {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 8px;
+        }
+
+        .counter-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        .tool-footer {
+            text-align: center;
+            padding: 15px;
+            color: var(--gray);
+            font-size: 0.85rem;
+            border-top: 1px solid #eee;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.5rem;
+            }
+            .counter-results {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .counter-results {
+                grid-template-columns: 1fr;
+            }
+            .tool-header h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="text-counter-tool">
+        <!-- Header -->
+        <div class="tool-header">
+            <h1>Text Counter Tool</h1>
+            <p>Count words, characters, sentences, and paragraphs in real-time</p>
+        </div>
+
+        <!-- Ad Banner (Top) -->
+        <div class="ad-banner">
+            <p>Advertisement</p>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                data-ad-slot="YOUR_AD_SLOT_ID_TOP"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Main Body -->
+        <div class="tool-body">
+            <!-- Text Input -->
+            <div class="text-input-container">
+                <textarea id="text-input" placeholder="Type or paste your text here..."></textarea>
+                <div class="text-actions">
+                    <span class="text-info">Results update as you type</span>
+                    <button class="clear-btn" id="clear-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M15 7V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Clear Text
+                    </button>
+                </div>
+            </div>
+
+            <!-- Counter Results -->
+            <div class="counter-results">
+                <div class="counter-box">
+                    <h3>Words</h3>
+                    <div class="counter-value" id="word-count">0</div>
+                </div>
+                <div class="counter-box">
+                    <h3>Characters</h3>
+                    <div class="counter-value" id="char-count">0</div>
+                </div>
+                <div class="counter-box">
+                    <h3>Sentences</h3>
+                    <div class="counter-value" id="sentence-count">0</div>
+                </div>
+                <div class="counter-box">
+                    <h3>Paragraphs</h3>
+                    <div class="counter-value" id="paragraph-count">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Banner (Bottom) -->
+        <div class="ad-banner">
+            <p>Advertisement</p>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                data-ad-slot="YOUR_AD_SLOT_ID_BOTTOM"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Footer -->
+        <div class="tool-footer">
+            <p>© 2023 TextCounterPro | All processing happens in your browser</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const textInput = document.getElementById('text-input');
+            const wordCount = document.getElementById('word-count');
+            const charCount = document.getElementById('char-count');
+            const sentenceCount = document.getElementById('sentence-count');
+            const paragraphCount = document.getElementById('paragraph-count');
+            const clearBtn = document.getElementById('clear-btn');
+
+            // Count Text Elements
+            function countText() {
+                const text = textInput.value.trim();
+
+                // Character Count (including spaces)
+                charCount.textContent = text.length;
+
+                // Word Count (handles contractions, hyphens, etc.)
+                const words = text === "" ? 0 : text.split(/\s+/).filter(word => word.length > 0).length;
+                wordCount.textContent = words;
+
+                // Sentence Count (handles multiple punctuation marks)
+                const sentences = text === "" ? 0 : text.split(/[.!?]+(?=\s|$)/).filter(s => s.trim().length > 0).length;
+                sentenceCount.textContent = sentences;
+
+                // Paragraph Count (handles multiple line breaks)
+                const paragraphs = text === "" ? 0 : text.split(/\n+/).filter(p => p.trim().length > 0).length;
+                paragraphCount.textContent = paragraphs;
+            }
+
+            // Event Listeners
+            textInput.addEventListener('input', countText);
+            clearBtn.addEventListener('click', function() {
+                textInput.value = '';
+                countText();
+                textInput.focus();
+            });
+
+            // Initialize
+            countText();
+        });
+    </script>
+</body>
+</html>
