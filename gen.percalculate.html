@@ -1,1 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online percentage calculator tool. Calculate percentages, increases, decreases, and differences instantly.">
+    <meta name="keywords" content="percentage calculator, percent increase, percent decrease, percentage difference, math calculator">
+    <meta name="author" content="PercentageCalculatorPro">
+    <title>Percentage Calculator | Calculate Percentages, Increases & Differences</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --ad-bg: #f1f3ff;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .percentage-calculator-tool {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .tool-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tool-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .tool-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Main Content */
+        .tool-body {
+            padding: 20px;
+        }
+
+        /* Calculator Types */
+        .calc-types {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .calc-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .calc-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Input Section */
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Results Section */
+        .results-section {
+            margin-top: 25px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .result-unit {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+
+        /* Ad Banner */
+        .ad-banner {
+            background: var(--ad-bg);
+            padding: 12px;
+            text-align: center;
+            border-top: 1px dashed #ddd;
+        }
+
+        .ad-banner p {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        .tool-footer {
+            text-align: center;
+            padding: 15px;
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.5rem;
+            }
+            .calc-types {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .tool-header h1 {
+                font-size: 1.4rem;
+            }
+            .result-value {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="percentage-calculator-tool">
+        <!-- Header -->
+        <div class="tool-header">
+            <h1>Percentage Calculator</h1>
+            <p>Calculate percentages, increases, decreases, and differences</p>
+        </div>
+
+        <!-- Main Body -->
+        <div class="tool-body">
+            <!-- Calculator Types -->
+            <div class="calc-types">
+                <button class="calc-btn active" data-calc="basic">Basic %</button>
+                <button class="calc-btn" data-calc="increase">% Increase</button>
+                <button class="calc-btn" data-calc="decrease">% Decrease</button>
+                <button class="calc-btn" data-calc="difference">% Difference</button>
+            </div>
+
+            <!-- Input Section -->
+            <div class="input-section" id="input-section">
+                <!-- Basic Percentage Calculator -->
+                <div class="input-group" data-calc="basic">
+                    <label for="basic-value">What is <input type="number" id="basic-percent" class="inline-input" value="10">% of</label>
+                    <input type="number" id="basic-value" placeholder="Enter value" value="100">
+                </div>
+
+                <!-- Percentage Increase Calculator -->
+                <div class="input-group" data-calc="increase" style="display: none;">
+                    <label for="increase-original">Original Value</label>
+                    <input type="number" id="increase-original" placeholder="Enter original value" value="100">
+                    <label for="increase-new">New Value</label>
+                    <input type="number" id="increase-new" placeholder="Enter new value" value="110">
+                </div>
+
+                <!-- Percentage Decrease Calculator -->
+                <div class="input-group" data-calc="decrease" style="display: none;">
+                    <label for="decrease-original">Original Value</label>
+                    <input type="number" id="decrease-original" placeholder="Enter original value" value="100">
+                    <label for="decrease-new">New Value</label>
+                    <input type="number" id="decrease-new" placeholder="Enter new value" value="90">
+                </div>
+
+                <!-- Percentage Difference Calculator -->
+                <div class="input-group" data-calc="difference" style="display: none;">
+                    <label for="difference-value1">Value 1</label>
+                    <input type="number" id="difference-value1" placeholder="Enter first value" value="100">
+                    <label for="difference-value2">Value 2</label>
+                    <input type="number" id="difference-value2" placeholder="Enter second value" value="110">
+                </div>
+
+                <button class="calculate-btn" id="calculate-btn">Calculate</button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="results-section">
+                <div class="result-card">
+                    <div id="result-title">Result</div>
+                    <div class="result-value" id="result-value">10</div>
+                    <div class="result-unit" id="result-unit">is 10% of 100</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Banner (Moved to end) -->
+        <div class="ad-banner">
+            <p>Advertisement</p>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                data-ad-slot="YOUR_AD_SLOT_ID"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Footer -->
+        <div class="tool-footer">
+            <p>© 2023 PercentageCalculatorPro | All calculations happen in your browser</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const calcBtns = document.querySelectorAll('.calc-btn');
+            const inputGroups = document.querySelectorAll('.input-group');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const resultValue = document.getElementById('result-value');
+            const resultUnit = document.getElementById('result-unit');
+            const resultTitle = document.getElementById('result-title');
+
+            // Current calculator type
+            let currentCalc = 'basic';
+
+            // Switch calculator type
+            function switchCalculator(calcType) {
+                currentCalc = calcType;
+                
+                // Update active button
+                calcBtns.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.calc === calcType) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                // Show/hide input groups
+                inputGroups.forEach(group => {
+                    if (group.dataset.calc === calcType) {
+                        group.style.display = 'block';
+                    } else {
+                        group.style.display = 'none';
+                    }
+                });
+                
+                // Calculate with new type
+                calculate();
+            }
+
+            // Calculate percentage
+            function calculate() {
+                let value, title, unit;
+                
+                switch(currentCalc) {
+                    case 'basic':
+                        const percent = parseFloat(document.getElementById('basic-percent').value) || 0;
+                        const baseValue = parseFloat(document.getElementById('basic-value').value) || 0;
+                        value = (percent / 100) * baseValue;
+                        title = 'Result';
+                        unit = `${percent}% of ${baseValue} is ${value.toFixed(2)}`;
+                        break;
+                        
+                    case 'increase':
+                        const original = parseFloat(document.getElementById('increase-original').value) || 0;
+                        const newVal = parseFloat(document.getElementById('increase-new').value) || 0;
+                        value = ((newVal - original) / original) * 100;
+                        title = 'Percentage Increase';
+                        unit = `From ${original} to ${newVal} is a ${value.toFixed(2)}% increase`;
+                        break;
+                        
+                    case 'decrease':
+                        const originalDec = parseFloat(document.getElementById('decrease-original').value) || 0;
+                        const newValDec = parseFloat(document.getElementById('decrease-new').value) || 0;
+                        value = ((originalDec - newValDec) / originalDec) * 100;
+                        title = 'Percentage Decrease';
+                        unit = `From ${originalDec} to ${newValDec} is a ${value.toFixed(2)}% decrease`;
+                        break;
+                        
+                    case 'difference':
+                        const value1 = parseFloat(document.getElementById('difference-value1').value) || 0;
+                        const value2 = parseFloat(document.getElementById('difference-value2').value) || 0;
+                        const average = (value1 + value2) / 2;
+                        value = (Math.abs(value1 - value2) / average) * 100;
+                        title = 'Percentage Difference';
+                        unit = `Difference between ${value1} and ${value2} is ${value.toFixed(2)}%`;
+                        break;
+                }
+                
+                // Update results
+                resultValue.textContent = value.toFixed(2);
+                resultTitle.textContent = title;
+                resultUnit.textContent = unit;
+            }
+
+            // Event Listeners
+            calcBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchCalculator(this.dataset.calc);
+                });
+            });
+            
+            calculateBtn.addEventListener('click', calculate);
+            
+            // Calculate on any input change
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', calculate);
+            });
+
+            // Initial calculation
+            calculate();
+        });
+    </script>
+</body>
+</html>
